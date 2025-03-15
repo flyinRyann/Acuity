@@ -29,6 +29,7 @@ const formSchema = z.object({
 const SkillsSelectionPage = () => {
     const router = useRouter();
     const [entryName, setEntryName] = useState("Journal Entry #12");
+    const [isButtonEnabled, setIsButtonEnabled] = useState(false);
     
     // Skills list
     const skillsList = [
@@ -45,6 +46,11 @@ const SkillsSelectionPage = () => {
                 const parsedData = JSON.parse(savedFormData);
                 if (parsedData.entryName) {
                     setEntryName(parsedData.entryName);
+                }
+                
+                // Check if we already have skills selected to enable the button
+                if (parsedData.selectedSkills && parsedData.selectedSkills.length > 0) {
+                    setIsButtonEnabled(true);
                 }
             }
         }
@@ -68,16 +74,25 @@ const SkillsSelectionPage = () => {
         defaultValues: loadSavedSkills(),
     });
 
-    const { isSubmitting, isValid } = form.formState;
+    const { isSubmitting } = form.formState;
     const selectedSkills = form.watch("selectedSkills");
+    
+    // Update button state whenever selectedSkills changes
+    useEffect(() => {
+        setIsButtonEnabled(selectedSkills.length > 0);
+    }, [selectedSkills]);
 
     // Handle skill selection
     const toggleSkill = (skill: string) => {
         const currentSkills = form.getValues("selectedSkills");
         if (currentSkills.includes(skill)) {
-            form.setValue("selectedSkills", currentSkills.filter(s => s !== skill));
+            form.setValue("selectedSkills", currentSkills.filter(s => s !== skill), {
+                shouldValidate: true
+            });
         } else {
-            form.setValue("selectedSkills", [...currentSkills, skill]);
+            form.setValue("selectedSkills", [...currentSkills, skill], {
+                shouldValidate: true
+            });
         }
     };
 
@@ -98,7 +113,7 @@ const SkillsSelectionPage = () => {
             localStorage.setItem('formData', JSON.stringify(formData));
             
             // Navigate to the next page
-            router.push('/rating');
+            router.push('/page3-rating');
         } catch (error) {
             console.log("Error saving form data:", error);
         }
@@ -174,7 +189,7 @@ const SkillsSelectionPage = () => {
 
                 {/* Bottom section with navigation buttons and progress indicator */}
                 <div className="mt-auto pt-10">
-                    {/* Progress dots */}
+                    {/* Progress dots and navigation */}
                     <div className="flex justify-center items-center mb-6">
                         <Button
                             type="button"
@@ -195,8 +210,12 @@ const SkillsSelectionPage = () => {
                         <Button
                             type="button"
                             onClick={form.handleSubmit(onSubmit)}
-                            className="mx-4 bg-gray-700 hover:bg-gray-600 px-6"
-                            disabled={!isValid || isSubmitting}
+                            className={`mx-4 px-6 ${
+                                isButtonEnabled 
+                                ? "bg-gray-700 hover:bg-gray-600 cursor-pointer" 
+                                : "bg-gray-400 cursor-not-allowed"
+                            }`}
+                            disabled={!isButtonEnabled || isSubmitting}
                         >
                             Next
                         </Button>
