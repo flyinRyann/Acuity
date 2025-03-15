@@ -7,22 +7,15 @@ import Link from "next/link";
 export default function Home() {
   return (
     <div className="min-h-screen bg-white">
-      {/* Header */}
-      <header className="border-b border-gray-200 p-4 flex justify-between items-center">
-        <div className="flex items-center gap-2">
-          <Image src="/acuity-logo.png" alt="Acuity" width={40} height={40} className="rounded-full" />
-          <h1 className="text-2xl font-medium text-gray-800">Acuity</h1>
-        </div>
-        <div>
-          <UserButton afterSignOutUrl="/" />
-        </div>
-      </header>
+      
 
       {/* Dashboard Content */}
       <main className="p-4">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-medium text-gray-800">Dashboard</h2>
-          <Button className="bg-zinc-800 hover:bg-zinc-700">Create Entry</Button>
+          <Link href="/entry">
+            <Button className="bg-zinc-800 hover:bg-zinc-700">Create Entry</Button>
+          </Link>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
