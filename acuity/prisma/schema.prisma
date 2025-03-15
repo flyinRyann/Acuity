@@ -8,7 +8,55 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// prisma/schema.prisma
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url  	    = env("DATABASE_URL")
+  // uncomment next line if you use Prisma <5.10
+  // directUrl = env("DATABASE_URL_UNPOOLED")
+}
+
+model Skill {
+  id          String        @id @default(uuid())
+  name        String        @unique
+  description String?       @db.Text
+  
+  entrySkills EntrySkill[]
+  
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model Entry {
+  id          String       @id @default(uuid())
+  title       String
+  reflection  String?      @db.Text
+  isDraft     Boolean      @default(true)
+  
+  userId      String       // This will store the Clerk user ID
+  
+  entrySkills EntrySkill[]
+  
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  
+  @@index([userId])
+}
+
+model EntrySkill {
+  id          String   @id @default(uuid())
+  confidence  Int      @default(1) // Rating from 1-5
+  
+  entryId     String
+  entry       Entry    @relation(fields: [entryId], references: [id], onDelete: Cascade)
+  
+  skillId     String
+  skill       Skill    @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@unique([entryId, skillId])
+  @@index([entryId])
+  @@index([skillId])
 }
