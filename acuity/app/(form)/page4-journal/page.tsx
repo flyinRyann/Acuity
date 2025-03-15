@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
+import { Separator } from "@/components/ui/separator";
 
 import {
     Form,
@@ -155,9 +156,10 @@ const JournalEntryPage = () => {
                                             <FormLabel className="text-xl font-medium">
                                                 Reflect on how you applied these skills today...
                                             </FormLabel>
-                                            <div className="text-sm text-gray-500 mb-4">
+                                            <div className="text-sm text-gray-500">
                                                 What went well? What could be improved? What did you learn?
                                             </div>
+                                            <Separator className="mt-1 mb-6"/>
                                             
                                             {/* Text editor toolbar */}
                                             <div className="bg-gray-700 text-white p-2 rounded-t-md flex items-center space-x-4">

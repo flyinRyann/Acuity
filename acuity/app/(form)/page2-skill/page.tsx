@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 
 const formSchema = z.object({
     selectedSkills: z.array(z.string()).min(1, {
@@ -157,9 +158,10 @@ const SkillsSelectionPage = () => {
                                             <FormLabel className="text-xl font-medium">
                                                 Which soft skills did you develop today?
                                             </FormLabel>
-                                            <FormDescription className="text-base text-gray-500 mt-1 mb-6">
+                                            <FormDescription className="text-base text-gray-500">
                                                 Click on the buttons representing the skills you improved on today!
                                             </FormDescription>
+                                            <Separator className="mt-1 mb-6"/>
                                             <FormControl>
                                                 <div className="flex flex-wrap gap-3">
                                                     {skillsList.map((skill) => (

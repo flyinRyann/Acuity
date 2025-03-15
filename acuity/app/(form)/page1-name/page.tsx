@@ -19,6 +19,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft } from "lucide-react";
+import { Separator } from "@/components/ui/separator"
 
 const formSchema = z.object({
     entryName: z.string().min(1, {
@@ -109,9 +110,11 @@ const NameEntryPage = () =>  {
                                             <FormLabel className="text-2xl font-medium">
                                                 Name Your Entry
                                             </FormLabel>
-                                            <FormDescription className="text-base text-gray-600 mt-2 mb-8">
+                                            <FormDescription className="text-base text-gray-600">
                                                 What would you like to name your journal entry?
                                             </FormDescription>
+                                            <Separator />
+                                            <div className="absolute bottom-0 left-0 w-full h-px bg-gray-200"></div>
                                             <FormControl>
                                                 <Input
                                                     disabled={isSubmitting}

@@ -19,6 +19,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
+import { Separator } from "@/components/ui/separator";
 
 const formSchema = z.object({
     skillRatings: z.record(z.number().min(1).max(5))
@@ -132,9 +133,10 @@ const RatingPage = () => {
                             className="space-y-8"
                         >
                             {/* Rating section header */}
-                            <h2 className="text-xl font-medium">
+                            <FormLabel className="text-xl font-medium">
                                 On a scale of 1 to 5, how confident did you feel in your skills today?
-                            </h2>
+                            </FormLabel>
+                            <Separator className="mt-1 mb-6"/>
                             
                             {/* Skill rating sliders */}
                             <div className="space-y-6">
