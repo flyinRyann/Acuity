@@ -42,47 +42,23 @@ export default function Home() {
 
         {/* Dashboard Layout - Main Grid Container */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {/* Overview Section - Full Width */}
+          {/* Welcome Banner - Full Width - Replacing "Who Are We?" */}
           <div className="col-span-1 md:col-span-2">
-            <Card className="bg-gray-700 text-white h-80">
-              <CardHeader>
-                <CardTitle>Who Are We?</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="overflow-y-auto h-56 px-4 text-center">
-                  <p className="font-medium text-lg mb-3">Welcome to Acuity, your personal soft skills development
-                    companion.</p>
-
-                  <p className="mb-3">Acuity helps you intentionally nurture and track your professional soft skills
-                    through guided reflection and personalised insights.</p>
-
-                  <p className="mb-3">We differentiate ourselves by focusing exclusively on soft skills development
-                    through reflective practice and AI-powered guidance. While other platforms might touch on soft
-                    skills as a secondary feature, Acuity places them at the core of professional growth.</p>
-
-                  <p className="font-medium mt-4 mb-2">Our features include:</p>
-
-                  <ul className="text-left space-y-2 list-disc pl-5">
-                    <li><span className="font-medium">Interactive Dashboard</span> that visualises your current
-                      confidence levels across different soft skills categories, providing at-a-glance insights into
-                      your development journey.
-                    </li>
-
-                    <li><span className="font-medium">Structured Journaling System</span> that guides users through
-                      meaningful reflections on their soft skill experiences.
-                    </li>
-
-                    <li><span className="font-medium">Comprehensive Archive</span> that stores all previous reflections,
-                      allowing users to track their growth over time and recognise patterns in their development.
-                    </li>
-
-                    <li><span className="font-medium">AI Companion "A-Cutie"</span> trained specifically on soft skills
-                      development research and best practices.
-                    </li>
-                  </ul>
-                </div>
-              </CardContent>
-            </Card>
+            <div className="h-80 rounded-lg overflow-hidden" style={{ backgroundColor: "#464646" }}>
+              <div className="relative h-full w-full flex items-center justify-center">
+                <Image
+                  src="/welcome.png"
+                  alt="Welcome to Acuity"
+                  fill
+                  style={{
+                    objectFit: 'contain',
+                    objectPosition: 'center'
+                  }}
+                  className="block"
+                  priority
+                />
+              </div>
+            </div>
           </div>
 
           {/* Last Entry Section */}
