@@ -3,9 +3,9 @@ import { UserButton } from "@clerk/nextjs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
 import Link from "next/link";
-import { Logo } from "../_components/logo";
-import { Navbar } from "../_components/navbar";
-import CreateEntryButton from "../_components/create-entry-button";
+import { Logo } from "../(dashboard)/_components/logo";
+import { Navbar } from "../(dashboard)/_components/navbar";
+import CreateEntryButton from "../(dashboard)/_components/create-entry-button";
 import { Eye, Users } from "lucide-react";
 import React from 'react';
 
@@ -33,7 +33,6 @@ export default function Home() {
           Entry History
         </Link>
       </div>
-
       {/* Main Content */}
       <div className="p-4">
         {/* Create Entry Button/Dashboard */}
