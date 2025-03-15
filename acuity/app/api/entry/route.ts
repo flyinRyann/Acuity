@@ -7,25 +7,36 @@ export async function POST(
 ) {
     try {
         const { userId } = await auth();
-        const { title, skills } = await req.json();
+        const { entryName, selectedSkills, skillRatings, journalEntry } = await req.json();
 
         if (!userId) {
             return new NextResponse("Unauthorized", { status: 401 });
         }
 
-        // Create the entry first
+        // Validate required data
+        if (!entryName) {
+            return new NextResponse("Entry name is required", { status: 400 });
+        }
+
+        // Create the entry
         const entry = await db.entry.create({
             data: {
                 userId,
-                title,
-                isDraft: true
+                title: entryName,
+                reflection: journalEntry || null,
+                isDraft: false // Set to false if this is a final submission
             }
         });
 
-        // Create or connect skills and create EntrySkill connections
-        if (skills && skills.length > 0) {
-            for (const skillName of skills) {
-                // Get or create the skill
+        // Process selected skills and their ratings
+        if (selectedSkills && selectedSkills.length > 0) {
+            for (const skillName of selectedSkills) {
+                // Get confidence rating for this skill, default to 3 if not specified
+                const confidence = skillRatings && skillRatings[skillName] 
+                    ? skillRatings[skillName] 
+                    : 3;
+                
+                // Find or create the skill
                 let skill = await db.skill.findUnique({
                     where: { name: skillName }
                 });
@@ -36,20 +47,26 @@ export async function POST(
                     });
                 }
                 
-                // Create the EntrySkill connection
+                // Create the EntrySkill connection with the confidence rating
                 await db.entrySkill.create({
                     data: {
                         entryId: entry.id,
                         skillId: skill.id,
-                        confidence: 1 // Default confidence value
+                        confidence: confidence
                     }
                 });
             }
         }
 
-        return NextResponse.json(entry);
+        return NextResponse.json({
+            success: true,
+            entry: {
+                id: entry.id,
+                title: entry.title
+            }
+        });
     } catch (error) {
-        console.log("[ENTRY]", error);
-        return new NextResponse("Internal Error", { status: 500 })
+        console.log("[JOURNAL_ENTRY_SUBMISSION]", error);
+        return new NextResponse("Internal Error", { status: 500 });
     }
 }

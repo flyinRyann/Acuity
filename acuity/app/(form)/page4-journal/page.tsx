@@ -91,15 +91,11 @@ const JournalEntryPage = () => {
                 journalEntry: values.journalEntry
             };
             
-            // Store form data
+            // Store form data in localStorage (optional if you want to keep it until success)
             localStorage.setItem('formData', JSON.stringify(formData));
             
-            // Navigate to completion page or submit form data to API
-            router.push('/');
-            
-            // Alternatively, if you want to post to an API:
-            /*
-            const response = await fetch('/api/submit-journal', {
+            // Submit all form data to API
+            const response = await fetch('/api/entry', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -108,13 +104,23 @@ const JournalEntryPage = () => {
             });
             
             if (response.ok) {
-                router.push('/completion');
+                // Clear localStorage form data after successful submission
+                localStorage.removeItem('formData');
+                
+                // Show success message or redirect to success page
+                router.push('/'); // Make sure to create this page
             } else {
-                console.error('Error submitting form data');
+                // Handle error response
+                const errorData = await response.json().catch(() => null);
+                console.error('Error submitting form data:', errorData || response.statusText);
+                
+                // You could set an error state here to display to the user
+                // setSubmissionError(errorData?.message || 'Failed to submit entry');
             }
-            */
         } catch (error) {
-            console.log("Error saving form data:", error);
+            console.log("Error submitting form data:", error);
+            // You could set an error state here to display to the user
+            // setSubmissionError('An unexpected error occurred');
         }
     };
 
