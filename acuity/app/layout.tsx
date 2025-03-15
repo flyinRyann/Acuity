@@ -5,6 +5,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import Script from "next/script";
 
 
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -32,8 +33,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
       {children}
-
-      <script src="https://cdn.botpress.cloud/webchat/v2.3/inject.js"></script>
+      <script src="https://cdn.botpress.cloud/webchat/v2.2/inject.js"></script>
       <script src="https://files.bpcontent.cloud/2025/03/15/01/20250315011741-CN3ZUZ0E.js"></script>
       </body>
       </html>
