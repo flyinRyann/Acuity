@@ -29,7 +29,7 @@ export default function Home() {
         <Link href="#" className="px-6 py-4 border-b-2 border-black font-medium">
           Dashboard
         </Link>
-        <Link href="#" className="px-6 py-4 text-gray-600">
+        <Link href="/entry-history" className="px-6 py-4 text-gray-600">
           Entry History
         </Link>
       </div>
