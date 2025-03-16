@@ -76,6 +76,8 @@ const JournalEntryPage = () => {
         }
     }, [form]);
 
+    const { isSubmitting } = form.formState;
+
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
             // Get any existing form data or create new object
