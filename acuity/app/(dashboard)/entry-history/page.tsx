@@ -135,13 +135,6 @@ export default function EntryHistory() {
           Entry History
         </Link>
       </div>
-
-      <div className="p-4">
-        {/* Create Entry Button/Dashboard */}
-        <div className="flex justify-end items-center mb-6">
-          <CreateEntryButton2/>
-        </div>
-      </div>
       
       {/* Main Content */}
       <div className="p-4 max-w-4xl mx-auto">
