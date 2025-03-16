@@ -3,10 +3,11 @@
 import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
 import { Logo } from "../_components/logo";
-import { Calendar, FileText, ChevronLeft, ChevronRight } from "lucide-react";
+import { Calendar, FileText, ChevronLeft, ChevronRight, Search } from "lucide-react";
 import CreateEntryButton2 from "@/app/(dashboard)/_components/create-entry-button-2";
 import React, { useEffect, useState } from "react";
 import { Navbar } from "../_components/navbar";
+import { Input } from "@/components/ui/input";
 
 // Define types for our data
 interface Skill {
@@ -37,10 +38,12 @@ interface PaginationData {
 
 export default function EntryHistory() {
   const [entries, setEntries] = useState<Entry[]>([]);
+  const [filteredEntries, setFilteredEntries] = useState<Entry[]>([]);
   const [pagination, setPagination] = useState<PaginationData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const fetchEntries = async (page = 1) => {
     try {
@@ -53,6 +56,7 @@ export default function EntryHistory() {
       
       const data = await response.json();
       setEntries(data.entries);
+      setFilteredEntries(data.entries);
       setPagination(data.pagination);
       setCurrentPage(page);
       setError(null);
@@ -68,10 +72,31 @@ export default function EntryHistory() {
     fetchEntries();
   }, []);
 
+  // Filter entries based on search query
+  useEffect(() => {
+    if (!searchQuery.trim()) {
+      setFilteredEntries(entries);
+      return;
+    }
+
+    const query = searchQuery.toLowerCase();
+    const filtered = entries.filter(entry => 
+      entry.title.toLowerCase().includes(query) || 
+      (entry.reflection && entry.reflection.toLowerCase().includes(query))
+    );
+    
+    setFilteredEntries(filtered);
+  }, [searchQuery, entries]);
+
   const handlePageChange = (newPage: number) => {
     if (pagination && newPage > 0 && newPage <= pagination.pages) {
       fetchEntries(newPage);
+      setSearchQuery(""); // Clear search when changing pages
     }
+  };
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
   };
 
   // Format date for display using native JavaScript
@@ -90,14 +115,10 @@ export default function EntryHistory() {
     return entrySkills.map(es => es.skill.name);
   };
 
-  // Create a summary from reflection text
-  const createSummary = (reflection: string | null) => {
+  // Get full reflection text
+  const getReflectionText = (reflection: string | null) => {
     if (!reflection) return "No reflection provided.";
-    
-    // Truncate to approximately 100 characters
-    return reflection.length > 100 
-      ? `${reflection.substring(0, 100).trim()}...` 
-      : reflection;
+    return reflection;
   };
 
   return (
@@ -115,12 +136,27 @@ export default function EntryHistory() {
         </Link>
       </div>
       
-
       {/* Main Content */}
       <div className="p-4 max-w-4xl mx-auto">
         <div className="mb-6">
-          <h1 className="text-2xl font-bold">Recent Entries</h1>
-          <p className="text-gray-600">Your skills development journey at a glance</p>
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+              <h1 className="text-2xl font-bold">Recent Entries</h1>
+              <p className="text-gray-600">Your skills development journey at a glance</p>
+            </div>
+            
+            {/* Search Bar */}
+            <div className="relative w-full md:w-64">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
+              <Input
+                type="text"
+                placeholder="Search entries..."
+                value={searchQuery}
+                onChange={handleSearch}
+                className="pl-10 pr-4 py-2 w-full"
+              />
+            </div>
+          </div>
         </div>
 
         {loading ? (
@@ -131,18 +167,32 @@ export default function EntryHistory() {
           <div className="bg-red-50 p-4 rounded-md text-red-700">
             {error}
           </div>
-        ) : entries.length === 0 ? (
+        ) : filteredEntries.length === 0 ? (
           <div className="text-center py-8">
-            <p className="text-gray-500">You haven't created any entries yet.</p>
-            <div className="mt-4">
-              <CreateEntryButton2 />
-            </div>
+            {searchQuery ? (
+              <div>
+                <p className="text-gray-500">No entries match your search.</p>
+                <button 
+                  onClick={() => setSearchQuery("")}
+                  className="text-orange-600 hover:underline mt-2"
+                >
+                  Clear search
+                </button>
+              </div>
+            ) : (
+              <div>
+                <p className="text-gray-500">You haven't created any entries yet.</p>
+                <div className="mt-4">
+                  <CreateEntryButton2 />
+                </div>
+              </div>
+            )}
           </div>
         ) : (
           <>
             {/* Brief Entries List */}
             <div className="space-y-4">
-              {entries.map((entry) => (
+              {filteredEntries.map((entry) => (
                 <Card key={entry.id} className="hover:shadow-md transition-shadow">
                   <CardContent className="p-4">
                     <div className="flex justify-between items-start">
@@ -166,16 +216,15 @@ export default function EntryHistory() {
                           </span>
                         ))}
                       </div>
-                      <p className="text-gray-600 text-sm">{createSummary(entry.reflection)}</p>
+                      <p className="text-gray-600 text-sm whitespace-pre-wrap">{getReflectionText(entry.reflection)}</p>
                     </div>
-
                   </CardContent>
                 </Card>
               ))}
             </div>
 
-            {/* Pagination */}
-            {pagination && pagination.pages > 1 && (
+            {/* Pagination - Only show when not searching */}
+            {!searchQuery && pagination && pagination.pages > 1 && (
               <div className="flex justify-center items-center mt-6 gap-2">
                 <button 
                   onClick={() => handlePageChange(currentPage - 1)}
@@ -197,8 +246,16 @@ export default function EntryHistory() {
               </div>
             )}
 
-            <div className="mt-6">
+            <div className="mt-6 flex justify-between items-center">
               <CreateEntryButton2 />
+              {searchQuery && (
+                <button 
+                  onClick={() => setSearchQuery("")}
+                  className="text-gray-600 hover:text-gray-800"
+                >
+                  Clear search
+                </button>
+              )}
             </div>
           </>
         )}
