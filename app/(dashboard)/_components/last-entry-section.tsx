@@ -4,8 +4,28 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import axios from 'axios';
 
+// Define interfaces for your data structures
+interface Skill {
+  id: string | number;
+  name: string;
+}
+
+interface EntrySkill {
+  id: string | number;
+  confidence: number;
+  skill: Skill;
+}
+
+interface JournalEntry {
+  id: string | number;
+  title?: string;
+  reflection?: string;
+  createdAt: string;
+  entrySkills?: EntrySkill[];
+}
+
 export default function LastEntrySection() {
-  const [lastEntry, setLastEntry] = useState<any>(null);
+  const [lastEntry, setLastEntry] = useState<JournalEntry | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -13,7 +33,7 @@ export default function LastEntrySection() {
     const fetchLastEntry = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get('/api/last');
+        const response = await axios.get<JournalEntry>('/api/last');
         setLastEntry(response.data);
         setError(null);
       } catch (err) {
@@ -106,11 +126,11 @@ export default function LastEntrySection() {
                 )}
               </div>
 
-              {lastEntry.entrySkills?.length > 0 && (
+              {lastEntry.entrySkills && lastEntry.entrySkills.length > 0 && (
                 <div className="bg-gray-50 rounded-lg p-3">
                   <h4 className="font-medium mb-3">Skills</h4>
                   <div className="space-y-3">
-                    {lastEntry.entrySkills.map((entrySkill: any) => (
+                    {lastEntry.entrySkills.map((entrySkill) => (
                       <div key={entrySkill.id}>
                         <p className="mb-1 text-sm">{entrySkill.skill.name}</p>
                         <div className="bg-gray-200 rounded-full h-2">

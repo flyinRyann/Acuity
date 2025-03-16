@@ -1,9 +1,7 @@
-import { Button } from "@/components/ui/button";
-import { UserButton } from "@clerk/nextjs";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
 import Link from "next/link";
-import { Logo } from "../_components/logo";
 import { Navbar } from "../_components/navbar";
 import CreateEntryButton from "../_components/create-entry-button";
 import { Eye, Users } from "lucide-react";
@@ -111,7 +109,7 @@ export default function Home() {
                       <Users size={20} className="text-gray-600"/>
                     </div>
                     <div>
-                      <h4 className="font-medium">Don't be afraid to share your ideas</h4>
+                      <h4 className="font-medium">Do not be afraid to share your ideas</h4>
                       <p className="text-sm text-gray-500">Sharing your thoughts will expand more ideas for the
                         project.</p>
                     </div>
