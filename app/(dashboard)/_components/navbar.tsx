@@ -1,5 +1,4 @@
 import { UserButton } from "@clerk/nextjs"
-import Image from "next/image";
 import { Logo } from "./logo";
 
 export const Navbar = () => {
