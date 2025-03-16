@@ -2,7 +2,6 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
-import { Logo } from "../_components/logo";
 import { Calendar, FileText, ChevronLeft, ChevronRight, Search } from "lucide-react";
 import CreateEntryButton2 from "@/app/(dashboard)/_components/create-entry-button-2";
 import React, { useEffect, useState } from "react";
@@ -181,7 +180,7 @@ export default function EntryHistory() {
               </div>
             ) : (
               <div>
-                <p className="text-gray-500">You haven't created any entries yet.</p>
+                <p className="text-gray-500">You have not created any entries yet.</p>
                 <div className="mt-4">
                   <CreateEntryButton2 />
                 </div>

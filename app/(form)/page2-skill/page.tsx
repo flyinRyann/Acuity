@@ -153,7 +153,7 @@ const SkillsSelectionPage = () => {
                                 <FormField
                                     control={form.control}
                                     name="selectedSkills"
-                                    render={({ field }) => (
+                                    render={() => (
                                         <FormItem>
                                             <FormLabel className="text-xl font-medium">
                                                 Which soft skills did you develop today?
